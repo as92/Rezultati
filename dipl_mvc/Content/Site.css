@@ -1,0 +1,298 @@
+﻿
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+}
+
+    /* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+}
+
+    /* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+    .dl-horizontal dt {
+        white-space: normal;
+    }
+
+    /* Set width on the form input elements since they're 100% wide by default */
+    input,
+    select,
+    textarea {
+        max-width: 280px;
+    }
+
+    .dropdown {
+        width: 400px;
+        height: 40px;
+        float: left;
+    }
+
+    .form-control {
+        display: inline;
+        width: 200px;
+        float: left;
+    }
+
+
+    .razmak {
+        width: 200px;
+        height: 20px;
+        float: left;
+        text-align: center;
+    }
+
+th {
+    width: 400px;
+    text-align: center;
+    
+}
+/*a.navbar-brand {
+    color:yellow;
+    
+    
+}*/
+#novo.error
+{
+    vertical-align:middle;
+}
+    .spremi {
+        text-align: center;
+    }
+.pomakni {
+    margin-left:16%;
+}
+
+    .ponuda {
+        position: fixed;
+        overflow: auto;
+        width: 100%;
+        height: 400px;
+    }
+
+    td {
+        text-align: center;
+        width: 200px;
+    }
+
+    .selected {
+        background: red;
+    }
+
+    
+
+#tablica {
+    width: 60%;
+    float: left;
+    overflow-y: auto;  
+    height: 400px;
+}
+thead tr {
+    
+}
+
+tbody {
+    
+}
+.form-group {
+    font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+
+}
+#novo {
+    margin: 0px;
+}
+h1 {
+    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+}
+
+
+.odigraj {
+    width: 30%;
+    height: 400px;
+    float: right;
+    border-style: solid;
+    position: relative;
+}
+.boldano{
+    font-family:Arial, sans-serif;
+    font-weight:700;
+    font-size:18px;
+    background-color:cornflowerblue;
+}
+    #parovi {
+        height: 55%;
+        overflow: scroll;
+    }
+
+    .spremi {
+        width: 100%;
+        height: 45%;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        background-color: lightblue;
+    }
+
+    .unos {
+        width: 50%;
+    }
+
+    .listic {
+        border: 3px solid black;
+    }
+
+    .par {
+        border: 1px solid;
+    }
+
+    #listici {
+        font-family: 'Times New Roman';
+        font-size: 16px;
+    }
+
+    .pogodeno {
+        background-color: #00FF7F;
+    }
+
+    .promaseno {
+        background-color: #FF6347;
+    }
+
+    .crveno {
+        color: red;
+    }
+
+    .okvir {
+        border-style: solid;
+        border-width: 2px;
+        border-color: #DCDCDC;
+    }
+
+    table tr td {
+        font-size: 16px;
+        font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif:center;
+    }
+table {
+    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+}
+
+    #plavo {
+        background: #0000CD;
+        font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+    }
+
+    #tekst {
+    }
+
+        #tekst ul li a {
+            color: white;
+        }
+
+            #tekst ul li a:hover {
+                color: #87CEEB;
+            }
+
+    #prijavljen {
+        width: auto;
+        height: auto;
+        /*border:1px solid black;*/
+        float: right;
+        display: inline-flex; /* the default for span */
+    }
+
+        #prijavljen p {
+            color: yellow;
+        }
+
+    .lijevo {
+        float: left;
+        width: 60%;
+    }
+
+    #username {
+        /*height: 50px;*/
+        width: auto;
+        margin: 7px;
+        /*border-style: solid;*/
+    }
+
+    #stanjeracuna {
+        /*height: 50px;*/
+        width: auto;
+        margin: 7px
+        /*border-style: solid;*/
+    }
+
+    #odjava {
+        /*height: 50px;*/
+        color: yellow;
+        width: auto;
+        margin: 7px
+        /*border-style: solid;*/
+    }
+
+        #odjava a {
+            color: yellow;
+        }
+
+            #odjava a:hover {
+                color: red;
+            }
+
+
+@media only screen and (max-width: 500px) {
+    #tablica {
+        width: 100%;       
+        overflow-y: scroll;
+        height: 220px;
+    }
+    #tablicaheader {
+        width: 100%;
+        
+  
+    }
+        #tablicaheader table {
+            margin-left:40%;
+        }
+    .odigraj {
+        width: 90%;
+        height: 300px;
+        bottom: 0;
+        border-style: solid;
+        position: absolute;
+    }
+    
+
+    #parovi {
+        height: 40%;
+        overflow-y: scroll;
+    }
+
+    .spremi {
+        width: 100%;
+        height: 50%;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        background-color: lightblue;
+        
+    }
+
+    .unos {
+        width: 50%;
+       
+    }
+
+   
+
+    .par {
+        border: 1px solid;
+    }
+    #odjava a:hover {
+        color: red;
+    }
+}

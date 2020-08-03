@@ -1,0 +1,96 @@
+﻿@model IEnumerable<dipl_mvc.Models.Utakmice>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+    <div id="plavo" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="col-md-8 lijevo">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Rezultati", "Index", "Home", new { area = "" }, new { @style = "color:yellow;", @class = "navbar-brand" })
+            </div>
+            <div id="tekst" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Utakmice/uživo", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Završene utakmice", "Zavrseno", "Home")</li>
+                    <li>@Html.ActionLink("Kladionica", "Kladionica", "Home")</li>
+                    <li>@Html.ActionLink("Listići", "Listic", "Home")</li>
+                </ul>
+            </div>
+        </div>
+        <div id="prijavljen">
+            <div id="username"><p>Dobrodošli @Session["Username"]</p></div>
+            @{
+                var id = Convert.ToInt32(Session["UserID"]);
+                var ime = Convert.ToString(Session["Username"]);
+
+                foreach (var item in ViewBag.Users)
+                {
+                    if (item.Id == id)
+                    {
+                        var tocka = item.Id.ToString();
+                        if (tocka.Contains(","))
+                        {
+
+                            <div id="stanjeracuna"><p id="@id">@item.stanjeRacuna.ToString().Substring(0, 6) kn</p></div>
+                        }
+                        else
+                        {
+
+                            <div id="stanjeracuna"><p id="@id">@item.stanjeRacuna kn</p></div>
+                        }
+                    }
+                }
+            }
+            <div id="odjava"><a href="@Url.Action("Logout","Home")">Odjava</a></div>
+        </div>
+    </div>
+    </br>
+    </br>
+    </br>
+    <div class="container body-content">
+        <table class="table">
+
+            @foreach (var item in Model)
+            {
+                if (item.status == "Kraj")
+                {
+                    <tr class="okvir">
+                        <td>
+                            Kraj
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Domacin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.golDomacin)
+
+                            -
+
+                            @Html.DisplayFor(modelItem => item.golGost)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gost)
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</body>
+</html>
+
+

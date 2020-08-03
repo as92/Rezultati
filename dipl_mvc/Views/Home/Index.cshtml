@@ -1,0 +1,314 @@
+﻿@model IEnumerable<dipl_mvc.Models.Utakmice>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/bootstrap")
+    @*<link rel="stylesheet" type="text/css" href="~/Content/Site.css">*@
+    <script type="text/javascript" src="~/Scripts/jquery.signalR-2.4.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+</head>
+<body>
+    <div id="plavo" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="col-md-8 lijevo">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Rezultati", "Index", "Home", new { area = "" }, new { @style = "color:yellow;", @class = "navbar-brand" })
+            </div>
+            <div id="tekst" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Utakmice/uživo", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Završene utakmice", "Zavrseno", "Home")</li>
+                    <li>@Html.ActionLink("Kladionica", "Kladionica", "Home")</li>
+                    <li>@Html.ActionLink("Listići", "Listic", "Home")</li>
+                </ul>
+            </div>
+        </div>
+        <div id="prijavljen">
+            <div id="username"><p>Dobrodošli @Session["Username"]</p></div>
+            @{
+                var id = Convert.ToInt32(Session["UserID"]);
+
+
+                foreach (var item in ViewBag.Users)
+                {
+                    if (item.Id == id)
+                    {
+                        var tocka = item.Id.ToString();
+                        if (tocka.Contains(","))
+                        {
+
+                            <div id="stanjeracuna"><p id="@id">@item.stanjeRacuna.ToString().Substring(0, 6) kn</p></div>
+                        }
+                        else
+                        {
+
+                            <div id="stanjeracuna"><p id="@id">@item.stanjeRacuna kn</p></div>
+                        }
+                    }
+                }
+            }
+            <div id="odjava"><a href="@Url.Action("Logout","Home")">Odjava</a></div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="container body-content">
+        <table class="table">
+            @foreach (var item in Model)
+            {
+                if (item.status == null || item.status == "u tijeku" || item.status == "Pauza" || item.status == "u tijeku2")
+                {
+                    <tr class="okvir">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Domacin)
+                        </td>
+                        @if (item.status == "u tijeku" || item.status == "Pauza" || item.status == "u tijeku" || item.status == "u tijeku2")
+                        {
+                            <td>
+                                <p class="crveno" id="@item.Id domacin">@item.golDomacin</p>
+                            </td>
+                            <td>
+                                <p class="crveno" id="@item.Id gost">@item.golGost</p>
+                            </td>
+                        }
+                        else if (item.status == null)
+                        {
+                            <td>
+                                <p id="@item.Id domacin">-</p>
+                            </td>
+                            <td>
+                                <p id="@item.Id gost">-</p>
+                            </td>
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gost)
+                        </td>
+                        <td>
+                            @{
+                                var duljina = @item.PocetakUtakmice.ToString().Length;
+                                <p>@item.PocetakUtakmice.ToString().Substring(0, duljina - 3)</p>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (item.status == "u tijeku")
+                                {
+
+                                    var b = (ViewBag.Rjecnik as Dictionary<int, string>).Count();
+                                    if (b == 0)
+                                    {
+                                        <div id="@item.Id"></div>
+                                    }
+                                    else
+                                    {
+                                        var jedan = 0;
+                                        foreach (KeyValuePair<int, string> pair in ViewBag.Rjecnik)
+                                        {
+                                            if (pair.Key == item.Id)
+                                            {
+                                                <div id="@item.Id">@pair.Value</div>
+                                                jedan++;
+                                                if (jedan > 0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (jedan == 0)
+                                        {
+                                            <div id="@item.Id"></div>
+                                        }
+                                    }
+                                }
+                                else if (item.status == "u tijeku2")
+                                {
+                                    var c = (ViewBag.Rjecnik2 as Dictionary<int, string>).Count();
+                                    if (c == 0)
+                                    {
+                                        <div id="@item.Id"></div>
+                                    }
+                                    else
+                                    {
+                                        var dva = 0;
+                                        foreach (KeyValuePair<int, string> pair in ViewBag.Rjecnik2)
+                                        {
+                                            if (pair.Key == item.Id)
+                                            {
+                                                <div id="@item.Id">@pair.Value</div>
+                                                dva++;
+                                                if (dva > 0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (dva == 0)
+                                        {
+                                            <div id="@item.Id"></div>
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    <div id="@item.Id"></div>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    <script>
+
+        var content=@Html.Raw(Json.Encode(ViewBag.Id));
+        objutijeku = {};
+        if (content.length > 0) {
+            for (var i = 0; i < content.length; i++) {
+                objutijeku[content[i]] = setInterval(stoperica, 1000, content[i]);
+            }
+        }
+        var content2=@Html.Raw(Json.Encode(ViewBag.Id2));
+        objutijeku2 = {};
+        if (content2.length > 0) {
+            for (var i = 0; i < content2.length; i++) {
+                objutijeku2[content2[i]] = setInterval(stoperica, 1000, content2[i]);
+            }
+        }
+        function stoperica(id)
+        {
+                v = $('#' + id).html();
+                vrime = v.split(':');
+                a = parseInt(vrime[0]);
+                b = parseInt(vrime[1]);
+                ++b;
+                a = (b > 59) ? ++a : a;
+                b = (b > 59) ? 0 : b;
+                b = (b < 10) ? '0' + b : b;
+                $('#' + id).html(a + ':' + b);
+        }
+        var contentpauza =@Html.Raw(Json.Encode(ViewBag.Pauza));
+        if (contentpauza.length > 0) {
+            for (var i = 0; i < contentpauza.length; i++) {
+                zaustaviPauza(contentpauza[i]);
+            }
+        }
+        function zaustaviPauza(id)
+        {
+            console.log(id, "Pauza");
+            $('#' + id).html("Pauza");
+        }
+        var rezultati = $.connection.rezultatiHub;
+
+        rezultati.client.getScore = function (id, gol, strana) {
+            if (strana == "domacin") {
+                var el = document.getElementById(id + " " + "domacin");
+                console.log(el.innerHTML);
+                if (parseInt(el.innerHTML) == gol) { console.log("aa"); }
+                else {
+                    el.innerHTML = gol;
+                    var a = el.innerHTML;
+                    console.log(a);
+                    var original = el.style.color;
+                    var border = el.style.border;
+                    var font = el.style.fontSize;
+                    el.style.fontSize = 'large';
+                    el.style.border = 'solid #FF0000';
+                    el.style.color = '#FF0000';
+                    window.setTimeout(function () {
+                        el.style.color = '#FF0000';
+                        el.style.fontSize = font;
+                        el.style.border = border;
+                    }, 5000);
+                }
+            }
+            else {
+                var el2 = document.getElementById(id + " " + "gost");
+                if (parseInt(el2.innerHTML) == gol) { console.log("ad"); }
+                else {
+                    el2.innerHTML = gol;
+                    var original2 = el2.style.color;
+                    var font2 = el2.style.fontSize;
+                    var border2 = el2.style.border;
+                    el2.style.fontSize = 'large';
+                    el2.style.border = 'solid #FF0000';
+                    el2.style.color = '#FF0000';
+                    window.setTimeout(function () {
+                        el2.style.color = '#FF0000';
+                        el2.style.fontSize = font2;
+                        el2.style.border = border2;
+                    }, 5000);
+                }
+            }
+        }
+        objstart = {};
+        rezultati.client.pocetak = function (id, a, b) {
+            document.getElementById(id + " " + "domacin").innerHTML = 0;
+            document.getElementById(id + " " + "gost").innerHTML = 0;
+            document.getElementById(id + " " + "domacin").style.color = '#FF0000';
+            document.getElementById(id + " " + "gost").style.color = '#FF0000';
+            objstart[id] = setInterval(function () {
+                ++b;
+                a = (b > 59) ? ++a : a;
+                b = (b > 59) ? 0 : b;
+                b = (b < 10) ? '0' + b : b;
+
+                $('#' + id).html(a + ':' + b);
+            }, 1000);
+        }
+        rezultati.client.pauza = function (id) {
+            if (Object.keys(objutijeku).length > 0) {
+                clearInterval(objutijeku[id]);
+                $('#' + id).html("Pauza");
+            }
+            else if (Object.keys(objstart).length > 0) {
+                clearInterval(objstart[id]);
+                $('#' + id).html("Pauza");
+            }
+        }
+        objnastavi = {};
+        rezultati.client.nastavi = function (id, a, b) {
+            objnastavi[id] = setInterval(function () {
+                ++b;
+                a = (b > 59) ? ++a : a;
+                b = (b > 59) ? 0 : b;
+                b = (b < 10) ? '0' + b : b;
+
+                $('#' + id).html(a + ':' + b);
+            }, 1000);
+        }
+        rezultati.client.kraj = function (id, tekst) {
+            console.log("kraj objnastavi:", objnastavi);
+            console.log("kraj objutijeku2:", objutijeku2);
+            if (Object.keys(objutijeku2).length > 0) {
+                clearInterval(objutijeku2[id]);
+                delete objutijeku2[id];
+                $('#' + id).html(tekst);
+            }
+            else if (Object.keys(objnastavi).length > 0) {
+                clearInterval(objnastavi[id]);
+                delete objnastavi[id];
+                $('#' + id).html(tekst);
+            }
+            document.getElementById(id + " " + "domacin").style.color = '#000000';
+            document.getElementById(id + " " + "gost").style.color = '#000000';
+        }
+        $.connection.hub.start({ transport: ['webSockets', 'serverSentEvents', 'longPolling'] });
+    </script>
+</body>
+</html>
+
+

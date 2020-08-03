@@ -1,0 +1,72 @@
+﻿@model IEnumerable<dipl_mvc.Models.Utakmice>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/bootstrap")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="col-md-8 lijevo">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Admin", "Utakmice", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div id="tekst" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Dodaj utakmice i koeficijente", "DodajUtakmicu", "Admin")</li>
+                    <li>@Html.ActionLink("Utakmice", "Utakmice", "Admin")</li>
+                    <li>@Html.ActionLink("Završene utakmice", "Gotovo", "Admin")</li>
+                </ul>
+            </div>
+        </div>
+        <div id="prijavljen">
+            <div id="username"><p>Dobrodošli Admine</p></div>
+            <div id="odjava"><a href="@Url.Action("Logout","Home")">Odjava</a></div>
+        </div>
+    </div>
+    </br>
+    </br>
+    </br>
+    <div class="container body-content">
+        <table class="table">
+
+            @foreach (var item in Model)
+            {
+                if (item.status == "Kraj")
+                {
+                    <tr class="okvir">
+                        <td>
+                            Kraj
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Domacin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.golDomacin)
+
+                            -
+
+                            @Html.DisplayFor(modelItem => item.golGost)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gost)
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,151 @@
+﻿@model dipl_mvc.Models.Utakmice
+
+@*@{Html.EnableClientValidation(false); }*@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/bootstrap") 
+</head>
+<body>
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+        Html.EnableClientValidation(true);
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" });
+        @Html.AntiForgeryToken();
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="col-md-8 lijevo">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Admin", "Utakmice", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div id="tekst" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Dodaj utakmice i koeficijente", "DodajUtakmicu", "Admin")</li>
+                        <li>@Html.ActionLink("Utakmice", "Utakmice", "Admin")</li>
+                        <li>@Html.ActionLink("Završene utakmice", "Gotovo", "Admin")</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="prijavljen">
+                <div id="username"><p>Dobrodošli Admine</p></div>
+                <div id="odjava"><a href="@Url.Action("Logout","Home")">Odjava</a></div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Domacin, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Domacin, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Domacin, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Gost, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Gost, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Gost, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Koeficijent_1, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Koeficijent_1, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Koeficijent_1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Koeficijent_X, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Koeficijent_X, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Koeficijent_X, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Koeficijent_2, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Koeficijent_2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Koeficijent_2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Koeficijent_1X, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Koeficijent_1X, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Koeficijent_1X, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Koeficijent_X2, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Koeficijent_X2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Koeficijent_X2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Koeficijent_12, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Koeficijent_12, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Koeficijent_12, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    @Html.LabelFor(model => model.PocetakUtakmice, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PocetakUtakmice, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                        @Html.ValidationMessageFor(model => model.PocetakUtakmice)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" style="background-color:cornflowerblue; color:black" value="Stvori utakmicu" class="btn btn-default" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-2">
+                        <label class="label-success">@ViewBag.SuccessMessage</label>
+                        <label class="label-danger">@ViewBag.UnsuccessfulMessage</label>
+                        <label class="label-success">@ViewBag.UsporediMessage</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+            <script>
+
+                $.validator.methods.range = function (value, element, param) {
+                    var globalizedValue = value.replace(",", ".");
+                    return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+                }
+
+                $.validator.methods.number = function (value, element) {
+                    return this.optional(element) || /-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+                }
+                        //Date dd/MM/yyyy
+                        //$.validator.methods.date = function (value, element) {
+                        //    var date = value.split("/");
+                        //    return this.optional(element) || !/Invalid|NaN/.test(new Date(date[2], date[1], date[0], date[3], date[4], date[5], date[6]).toString());
+                        //}
+            </script>
+</body>
+</html>
+
+

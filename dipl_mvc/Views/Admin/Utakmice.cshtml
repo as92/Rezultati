@@ -1,0 +1,369 @@
+﻿@model IEnumerable<dipl_mvc.Models.Utakmice>
+@using System.Diagnostics;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="~/Scripts/jquery.signalR-2.4.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="col-md-8 lijevo">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Admin", "Utakmice", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div id="tekst" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Dodaj utakmice i koeficijente", "DodajUtakmicu", "Admin")</li>
+                    <li>@Html.ActionLink("Utakmice", "Utakmice", "Admin")</li>
+                    <li>@Html.ActionLink("Završene utakmice", "Gotovo", "Admin")</li>
+                </ul>
+            </div>
+        </div>
+        <div id="prijavljen">
+            <div id="username"><p>Dobrodošli Admine</p></div>
+            <div id="odjava"><a href="@Url.Action("Logout","Home")">Odjava</a></div>
+        </div>
+    </div>
+    </br>
+    </br>
+    </br>
+    <div class="container body-content">
+        <table class="table-bordered">
+            <tr>
+                <th>
+                    Domaćin
+                </th>
+                <th>
+                    Gost
+                </th>
+                <th>
+                    Početak utakmice
+                </th>
+                <th>
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                if (item.status == null || item.status == "u tijeku" || item.status == "Pauza" || item.status == "u tijeku2")
+                {
+                    <tr class="@item.Id">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Domacin)
+                            @{if (item.status == "u tijeku" || item.status == "u tijeku2")
+                                {
+                                    <input class="" id="@item.Id domacin" type="number" min="0" max="50" value=@item.golDomacin>
+                                    <button id="@item.Id btndomacin" style="visibility:visible" class="btn btn-primary btn-xs " onclick="posaljigoldomacin(@item.Id)">Promijeni</button>
+                                }
+                                else
+                                {
+                                    <input class="" id="@item.Id domacin" type="number" min="0" max="50" value=@item.golDomacin>
+                                    <button id="@item.Id btndomacin" style="visibility:hidden" class="btn btn-primary btn-xs " onclick="posaljigoldomacin(@item.Id)">Promijeni</button>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gost)
+                            @{if (item.status == "u tijeku" || item.status == "u tijeku2")
+                                {
+                                    <input class="" id="@item.Id gost" type="number" min="0" max="50" value=@item.golGost>
+                                    <button id="@item.Id btngost" style="visibility:visible" class="btn btn-primary btn-xs" onclick="posaljigolgost(@item.Id)">Promijeni</button>
+                                }
+                                else
+                                {
+                                    <input class="" id="@item.Id gost" type="number" min="0" max="50" value=@item.golGost>
+                                    <button id="@item.Id btngost" style="visibility:hidden" class="btn btn-primary btn-xs" onclick="posaljigolgost(@item.Id)">Promijeni</button>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var duljina = @item.PocetakUtakmice.ToString().Length;
+                                <p>@item.PocetakUtakmice.ToString().Substring(0, duljina - 3)</p>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (item.status == "u tijeku")
+                                {
+
+                                    var b = (ViewBag.Rjecnik as Dictionary<int, string>).Count();
+                                    if (b == 0)
+                                    {
+                                        <div id="@item.Id"></div>
+                                    }
+                                    else
+                                    {
+                                        var jedan = 0;
+                                        foreach (KeyValuePair<int, string> pair in ViewBag.Rjecnik)
+                                        {
+                                            if (pair.Key == item.Id)
+                                            {
+                                                <div id="@item.Id">@pair.Value</div>
+                                                jedan++;
+                                                if (jedan > 0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (jedan == 0)
+                                        {
+                                            <div id="@item.Id"></div>
+                                        }
+                                    }
+                                }
+                                else if (item.status == "u tijeku2")
+                                {
+                                    var c = (ViewBag.Rjecnik2 as Dictionary<int, string>).Count();
+                                    if (c == 0)
+                                    {
+                                        <div id="@item.Id"></div>
+                                    }
+                                    else
+                                    {
+                                        var dva = 0;
+                                        foreach (KeyValuePair<int, string> pair in ViewBag.Rjecnik2)
+                                        {
+                                            if (pair.Key == item.Id)
+                                            {
+                                                <div id="@item.Id">@pair.Value</div>
+                                                dva++;
+                                                if (dva > 0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (dva == 0)
+                                        {
+                                            <div id="@item.Id"></div>
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    <div id="@item.Id"></div>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{if (item.status == null)
+                                {
+                                    <button id="@item.Id Start" onclick="startTimer(@item.Id)" class="btn btn-primary btn-xs">Start</button>
+                                    <button id="@item.Id Pauza" onclick="Pauza(@item.Id)" style="visibility:hidden" class="btn btn-primary btn-xs">Pauza</button>
+                                    <button id="@item.Id Nastavi" onclick="Nastavi(@item.Id)" style="visibility:hidden" class="btn btn-primary btn-xs">Nastavi</button>
+                                    <button id="@item.Id Kraj" onclick="Kraj(@item.Id)" style="visibility:hidden" class="btn btn-primary btn-xs">Kraj</button>
+                                }
+                                else if (item.status == "u tijeku")
+                                {
+                                    <button id="@item.Id Pauza" onclick="Pauza(@item.Id)" style="visibility:visible" class="btn btn-primary btn-xs">Pauza</button>
+                                    <button id="@item.Id Nastavi" onclick="Nastavi(@item.Id)" style="visibility:hidden" class="btn btn-primary btn-xs">Nastavi</button>
+                                    <button id="@item.Id Kraj" onclick="Kraj(@item.Id)" style="visibility:hidden" class="btn btn-primary btn-xs">Kraj</button>
+                                }
+                                else if (item.status == "Pauza")
+                                {
+                                    <button id="@item.Id Nastavi" onclick="Nastavi(@item.Id)" style="visibility:visible" class="btn btn-primary btn-xs">Nastavi</button>
+                                    <button id="@item.Id Kraj" onclick="Kraj(@item.Id)" style="visibility:hidden" class="btn btn-primary btn-xs">Kraj</button>
+                                }
+                                else if (item.status == "u tijeku2")
+                                {
+                                    <button id="@item.Id Kraj" onclick="Kraj(@item.Id)" style="visibility:visible" class="btn btn-primary btn-xs">Kraj</button>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    <script type="text/javascript">
+        var content=@Html.Raw(Json.Encode(ViewBag.Id));
+        objutijeku = {};
+        if (content.length > 0) {
+            for (var i = 0; i < content.length; i++) {
+                objutijeku[content[i]] = setInterval(stoperica, 1000, content[i]);
+            }
+        }
+        var content2=@Html.Raw(Json.Encode(ViewBag.Id2));
+        objutijeku2 = {};
+        if (content2.length > 0) {
+            for (var i = 0; i < content2.length; i++) {
+                objutijeku2[content2[i]] = setInterval(stoperica, 1000, content2[i]);
+            }
+        }
+        function stoperica(id) {
+            v = $('#' + id).html();
+            vrime = v.split(':');
+            a = parseInt(vrime[0]);
+            b = parseInt(vrime[1]);
+            ++b;
+            a = (b > 59) ? ++a : a;
+            //if (a < 45) {
+            //    clearInterval(interval);
+
+            //}
+            b = (b > 59) ? 0 : b;
+            b = (b < 10) ? '0' + b : b;
+            $('#' + id).html(a + ':' + b);
+        }
+        var contentpauza =@Html.Raw(Json.Encode(ViewBag.Pauza));
+        if (contentpauza.length > 0) {
+            for (var i = 0; i < contentpauza.length; i++) {
+                zaustaviPauza(contentpauza[i]);
+            }
+        }
+        function zaustaviPauza(id)
+        {
+            console.log(id,"Pauza");
+            $('#' + id).html("Pauza");
+        }
+        var rezultati = $.connection.rezultatiHub;
+        var gol = 0;
+        var id;
+
+        function posaljigoldomacin(id) {
+            gol = document.getElementById(id + " " + "domacin").value;
+            rezultati.server.score(id, gol, "domacin");
+        }
+        function posaljigolgost(id) {
+            gol = document.getElementById(id + " " + "gost").value;
+            rezultati.server.score(id, gol, "gost");
+        }
+        function startTimer(id) {
+            rezultati.server.ukloni(id, "u tijeku");
+            rezultati.server.pocetak(id);
+            document.getElementById(id + " " + "Pauza").style.visibility = "visible";
+            document.getElementById(id + " " + "btndomacin").style.visibility = "visible";
+            document.getElementById(id + " " + "btngost").style.visibility = "visible";
+            document.getElementById(id + " " + "Start").disabled = true;
+        }
+        objstart = {};
+        rezultati.client.pocetak = function (id, a, b) {
+            objstart[id] = setInterval(function () {
+                ++b;
+                a = (b > 59) ? ++a : a;
+                b = (b > 59) ? 0 : b;
+                b = (b < 10) ? '0' + b : b;
+                $('#' + id).html(a + ':' + b);
+
+            }, 1000);
+        }
+        objnastavi = {};
+        rezultati.client.nastavi = function (id, a, b) {
+            objnastavi[id] = setInterval(function () {
+                ++b;
+                a = (b > 59) ? ++a : a;
+                b = (b > 59) ? 0 : b;
+                b = (b < 10) ? '0' + b : b;
+
+                $('#' + id).html(a + ':' + b);
+            }, 1000);
+            console.log("nastavi pritisnut:", objnastavi);
+        }
+        $.connection.hub.start({ transport: ['webSockets', 'serverSentEvents', 'longPolling'] });
+        function Pauza(id) {
+            console.log("pauza: objstart", objstart);
+            console.log("pauza: objutijeku", objutijeku);
+           if (Object.keys(objutijeku).length > 0) {
+               clearInterval(objutijeku[id]);
+               delete objutijeku[id];
+               $('#' + id).html("Pauza");
+           }
+           else if (Object.keys(objstart).length > 0) {
+               clearInterval(objstart[id]);
+               delete objstart[id];
+               $('#' + id).html("Pauza");
+           }
+            rezultati.server.pauza(id);
+           document.getElementById(id + " " + "btndomacin").style.visibility = "hidden";
+           document.getElementById(id + " " + "btngost").style.visibility = "hidden";
+           document.getElementById(id + " " + "Nastavi").style.visibility = "visible";
+            //document.getElementById(id + " " + "Pauza").disabled = true;
+            document.getElementById(id + " " + "Pauza").style.visibility = "hidden";
+        }
+        function Nastavi(id)
+        {
+            document.getElementById(id + " " + "btndomacin").style.visibility = "visible";
+            document.getElementById(id + " " + "btngost").style.visibility = "visible";
+            document.getElementById(id + " " + "Kraj").style.visibility = "visible";
+            rezultati.server.nastavi(id);
+            //document.getElementById(id + " " + "Nastavi").disabled = true;
+            document.getElementById(id + " " + "Nastavi").style.visibility = "hidden";
+        }
+
+        function Kraj(id) {
+
+            var d = document.getElementById(id + " " + "domacin").value;
+            var g = document.getElementById(id + " " + "gost").value;
+            var utakmica = {};
+            tip = "";
+            if (d == g)
+                tip = "X;1X;X2";
+            else if (d > g)
+                tip = "1;1X;12";
+            else
+                tip = "2;X2;12";
+            utakmica.Id = parseInt(id);
+            utakmica.TipKraj = tip;
+            utakmica.rezultat = d.toString() + "-" + g.toString();
+            utakmica.status = "Kraj";
+            $.ajax(
+                {
+                    type: "POST",
+                    url: '@Url.Action("Utakmice","Admin")',
+                    data: JSON.stringify(utakmica),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    //success: function () {
+                    //    alert("Data has been added successfully.");
+
+                    //},
+                    //error: function () {
+                    //    alert("Error while inserting data");
+                    //}
+                })
+            $.ajax(
+                {
+                     type: "POST",
+                    url: '@Url.Action("Listic","Home")',
+                    data: JSON.stringify(utakmica),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                })
+            zaustavi(id);
+            rezultati.server.kraj(id,"Kraj");
+            document.getElementById(id + " " + "btndomacin").style.visibility = "hidden";
+            document.getElementById(id + " " + "btngost").style.visibility = "hidden";
+            document.getElementById(id + " " + "Kraj").disabled = true;
+        }
+        function zaustavi(id) {
+
+            if (Object.keys(objutijeku2).length > 0) {
+                clearInterval(objutijeku2[id]);
+                delete objutijeku2[id];
+                $('#' + id).html("Kraj");
+            }
+            else if (Object.keys(objnastavi).length > 0) {
+                clearInterval(objnastavi[id]);
+                delete objnastavi[id];
+                $('#' + id).html("Kraj");
+            }
+        }
+    </script>
+
+</body>
+</html>
